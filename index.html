@@ -112,9 +112,12 @@
         <div class="race-controls">
             <button id="btn-nos" class="btn-nos" onmousedown="activateNOS()" onmouseup="deactivateNOS()" ontouchstart="activateNOS()" ontouchend="deactivateNOS()">NOS</button>
             <div class="pedals">
-                <button id="btn-gas" class="btn-gas" onmousedown="gasOn()" onmouseup="gasOff()" ontouchstart="gasOn()" ontouchend="gasOff()">ГАЗ</button>
-                <button id="btn-shift" class="btn-shift" onclick="shiftGear()">ПЕРЕКЛЮЧИТЬ ↑</button>
+                <button id="btn-gas" class="btn-gas" onmousedown="gasOn()" onmouseup="gasOff()" ontouchstart="gasOn()" ontouchend="gasOff()">ГАЗ (Space)</button>
+                <button id="btn-shift" class="btn-shift" onclick="if(raceState && raceState.playerGear===0){shiftToFirst()}else{shiftGear()}">ПЕРЕДАЧА ↑ (Shift)</button>
             </div>
+        </div>
+        <div class="race-tips">
+            <small>Старт: включи 1-ю передачу (Shift) → держи ГАЗ → на GO! стартуй | Переключай на 6500-7500 RPM | NOS (N)</small>
         </div>
     </div>
 

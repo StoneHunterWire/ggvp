@@ -694,6 +694,15 @@ body {
     box-shadow: 0 0 30px rgba(255, 179, 0, 0.6);
 }
 
+.race-tips {
+    text-align: center;
+    padding: 6px 20px;
+    background: #0a0a0f;
+    color: #666;
+    font-size: 12px;
+    border-top: 1px solid #222;
+}
+
 /* RESULT SCREEN */
 #screen-result {
     background: rgba(0, 0, 0, 0.95);
