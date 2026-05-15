@@ -3,28 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Racing Game</title>
+    <title>Drag Racing</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <div id="hud">
-            <span id="score">Score: 0</span>
-            <span id="speed">Speed: 0</span>
-        </div>
-        <canvas id="gameCanvas" width="400" height="700"></canvas>
-        <div id="start-screen">
-            <h1>RACING GAME</h1>
-            <p>Use arrow keys or A/D to steer</p>
-            <p>Up/W to accelerate, Down/S to brake</p>
-            <button id="start-btn">START</button>
-        </div>
-        <div id="game-over-screen" class="hidden">
-            <h1>GAME OVER</h1>
-            <p id="final-score">Score: 0</p>
-            <button id="restart-btn">RESTART</button>
+    <!-- MAIN MENU -->
+    <div id="screen-menu" class="screen active">
+        <div class="menu-bg">
+            <h1 class="game-title">DRAG<span>RACING</span></h1>
+            <p class="subtitle">Street Kings</p>
+            <div class="menu-buttons">
+                <button onclick="showScreen('garage')">ГАРАЖ</button>
+                <button onclick="showScreen('shop')">МАГАЗИН АВТО</button>
+                <button onclick="showScreen('upgrade')">ПРОКАЧКА</button>
+                <button onclick="showScreen('race-select')">ГОНКА</button>
+            </div>
+            <div class="player-info">
+                <span id="menu-money">$10,000</span>
+            </div>
         </div>
     </div>
+
+    <!-- GARAGE -->
+    <div id="screen-garage" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('menu')">← МЕНЮ</button>
+            <h2>ГАРАЖ</h2>
+            <span class="money" id="garage-money">$10,000</span>
+        </div>
+        <div class="garage-content">
+            <div class="car-display" id="garage-car-display">
+                <canvas id="garage-canvas" width="600" height="200"></canvas>
+            </div>
+            <div class="car-info" id="garage-car-info">
+                <h3 id="garage-car-name">—</h3>
+                <div class="stats">
+                    <div class="stat-row"><span>Двигатель</span><div class="stat-bar"><div id="stat-engine" class="stat-fill"></div></div></div>
+                    <div class="stat-row"><span>Турбо</span><div class="stat-bar"><div id="stat-turbo" class="stat-fill"></div></div></div>
+                    <div class="stat-row"><span>Шины</span><div class="stat-bar"><div id="stat-tires" class="stat-fill"></div></div></div>
+                    <div class="stat-row"><span>Масса</span><div class="stat-bar"><div id="stat-weight" class="stat-fill"></div></div></div>
+                    <div class="stat-row"><span>NOS</span><div class="stat-bar"><div id="stat-nos" class="stat-fill"></div></div></div>
+                </div>
+            </div>
+            <div class="garage-cars-list" id="garage-cars-list"></div>
+            <button class="btn-sell" id="btn-sell" onclick="sellCar()">ПРОДАТЬ</button>
+        </div>
+    </div>
+
+    <!-- SHOP -->
+    <div id="screen-shop" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('menu')">← МЕНЮ</button>
+            <h2>МАГАЗИН АВТО</h2>
+            <span class="money" id="shop-money">$10,000</span>
+        </div>
+        <div class="shop-content" id="shop-list"></div>
+    </div>
+
+    <!-- UPGRADE -->
+    <div id="screen-upgrade" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('menu')">← МЕНЮ</button>
+            <h2>ПРОКАЧКА</h2>
+            <span class="money" id="upgrade-money">$10,000</span>
+        </div>
+        <div class="upgrade-content">
+            <div class="upgrade-car-select">
+                <label>Авто:</label>
+                <select id="upgrade-car-select" onchange="selectUpgradeCar()"></select>
+            </div>
+            <div class="upgrade-list" id="upgrade-list"></div>
+        </div>
+    </div>
+
+    <!-- RACE SELECT -->
+    <div id="screen-race-select" class="screen">
+        <div class="screen-header">
+            <button class="btn-back" onclick="showScreen('menu')">← МЕНЮ</button>
+            <h2>ВЫБОР ГОНКИ</h2>
+            <span class="money" id="race-money">$10,000</span>
+        </div>
+        <div class="race-select-content">
+            <div class="race-car-select">
+                <label>Твоя машина:</label>
+                <select id="race-car-select"></select>
+            </div>
+            <div class="race-levels" id="race-levels"></div>
+        </div>
+    </div>
+
+    <!-- RACE -->
+    <div id="screen-race" class="screen">
+        <div class="race-hud">
+            <div class="race-hud-left">
+                <span id="race-player-name">Player</span>
+                <div class="rpm-bar"><div id="rpm-fill" class="rpm-fill"></div></div>
+                <span id="race-gear">N</span>
+            </div>
+            <div class="race-hud-center">
+                <div id="race-countdown"></div>
+                <div id="race-distance">0m / 402m</div>
+            </div>
+            <div class="race-hud-right">
+                <span id="race-opponent-name">Opponent</span>
+            </div>
+        </div>
+        <canvas id="race-canvas" width="900" height="400"></canvas>
+        <div class="race-controls">
+            <button id="btn-nos" class="btn-nos" onmousedown="activateNOS()" onmouseup="deactivateNOS()" ontouchstart="activateNOS()" ontouchend="deactivateNOS()">NOS</button>
+            <div class="pedals">
+                <button id="btn-gas" class="btn-gas" onmousedown="gasOn()" onmouseup="gasOff()" ontouchstart="gasOn()" ontouchend="gasOff()">ГАЗ</button>
+                <button id="btn-shift" class="btn-shift" onclick="shiftGear()">ПЕРЕКЛЮЧИТЬ ↑</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RACE RESULT -->
+    <div id="screen-result" class="screen">
+        <div class="result-content">
+            <h1 id="result-title">ПОБЕДА!</h1>
+            <div class="result-stats">
+                <p id="result-time">Время: 0.00s</p>
+                <p id="result-reward">Награда: $0</p>
+                <p id="result-opponent-time">Противник: 0.00s</p>
+            </div>
+            <button onclick="showScreen('menu')">В МЕНЮ</button>
+            <button onclick="showScreen('race-select')">ЕЩЁ ГОНКА</button>
+        </div>
+    </div>
+
     <script src="game.js"></script>
 </body>
 </html>
